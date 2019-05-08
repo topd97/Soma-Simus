@@ -12,6 +12,9 @@ teste1Baixa:      DB   21h
 teste1Alta:       DB   70h
 teste2Baixa:      DB   0F3h
 teste2Alta:       DB   1Fh
+saidaBaixa:       DB   0
+saidaAlta:        DB   0
+endSaida:         DW   saidaBaixa
 endTeste1:        DW   teste1Baixa
 endTeste2:        DW   teste2Baixa
 endTemp:          DS   2
@@ -23,8 +26,6 @@ podeUnder:        DB   0
 deuOVer:          DB   0
 precisaDesinverter: DB 0h
 somar:              DB 0h
-retAlto:           DS       1
-retBaixo:          DS       1
 var1Alta:         DS       1
 var1Baixa:        DS       1
 var2Alta:         DS       1
@@ -32,12 +33,6 @@ var2Baixa:        DS       1
 resultBaixa:      DS       1
 resultAlta:       DS       1
 VISOR:            EQU      0
-a:                DB       0
-b:                DB       0
-c:                DB       0
-d:                DB       0
-e:                DB       0
-f:                DB       0
 
 
 ORG 0
@@ -49,6 +44,10 @@ INICIOEXEMPLO: ;Inicialização de variaveis para a pilha
         LDA endTeste2+1
         PUSH
         LDA endTeste2
+        PUSH
+        LDA endSaida
+        PUSH
+        LDA endSAida+1
         PUSH
         LDA #0
         JSR ROTINA
@@ -64,6 +63,10 @@ ROTINA:;Inicio verdadeiro da rotina do exercicio
        POP
        STA endRetGeral+1
 
+       POP
+       STA endSaida
+       POP
+       STA endSaida
 
        POP
        STA endTemp
@@ -196,6 +199,14 @@ IMPRIME:
         OUT VISOR
         LDA resultBaixa
         OUT VISOR
+
+        STA @endSaida
+        LDA endSaida
+        ADD #1
+        STA endSaida 
+        LDA resultAlta
+        STA @endSaida
+
 
         ;colocar o retorno na pilha
 
